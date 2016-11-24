@@ -1,3 +1,17 @@
+#IntelliJ
+v2/HelloWorldApp/.idea/workspace.xml
+v2/HelloWorldApp/.idea/tasks.xml
+v2/HelloWorldApp/.idea/libraries/
+
+# Sensitive or high-churn files:
+v2/HelloWorldApp/.idea/dataSources/
+v2/HelloWorldApp/.idea/dataSources.ids
+v2/HelloWorldApp/.idea/dataSources.xml
+v2/HelloWorldApp/.idea/dataSources.local.xml
+v2/HelloWorldApp/.idea/sqlDataSources.xml
+v2/HelloWorldApp/.idea/dynamic.xml
+v2/HelloWorldApp/.idea/uiDesigner.xml
+
 # Mac
 .DS_Store
 
