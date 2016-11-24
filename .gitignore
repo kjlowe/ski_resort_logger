@@ -1,0 +1,6 @@
+# Mac
+.DS_Store
+
+# Maven
+v2/HelloWorldApp/log/
+v2/HelloWorldApp/target/
