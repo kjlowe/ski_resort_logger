@@ -37,7 +37,7 @@ public class ResortMountWashington extends Resort {
                     status = LiftStatus.STANDBY;
             }
 
-            liftStatusMap.put(lift, status);
+            lifts.put(lift, status);
         }
     }
 

@@ -8,10 +8,10 @@ import java.util.Map;
  */
 public abstract class Resort {
 
-    Map<String, LiftStatus> liftStatusMap = new HashMap<String, LiftStatus>();
+    Map<String, LiftStatus> lifts = new HashMap<String, LiftStatus>();
 
     public int getLiftCount() {
-        return liftStatusMap.size();
+        return lifts.size();
     }
 
     public abstract void UpdateLifts();

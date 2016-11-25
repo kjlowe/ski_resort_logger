@@ -34,7 +34,7 @@ public class ResortWhistlerBlackcomb extends Resort {
                     status = LiftStatus.STANDBY;
             }
 
-            liftStatusMap.put(matcher.group(1), status);
+            lifts.put(matcher.group(1), status);
         }
     }
 

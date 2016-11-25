@@ -35,7 +35,7 @@ public class ResortSquawAlpine extends Resort {
                     status = LiftStatus.OPEN;
             }
 
-            liftStatusMap.put(matcher.group(1), status);
+            lifts.put(matcher.group(1), status);
         }
     }
 
