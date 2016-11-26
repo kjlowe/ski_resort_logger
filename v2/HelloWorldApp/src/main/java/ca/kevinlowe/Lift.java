@@ -3,11 +3,22 @@ package ca.kevinlowe;
 import java.util.*;
 
 /**
- * Created by kevinlowe on 2016-11-24.
+ * Class representing a lift and it status history.
  */
 public class Lift {
 
+    /**
+     * name of the lift.
+     */
     public String name;
+
+    /**
+     * current status of the lift.
+     */
     public LiftStatus statusCurrent;
+
+    /**
+     * loaded history of the lifts status changes
+     */
     public LinkedList<LiftStatusChange> statusHistory;
 }

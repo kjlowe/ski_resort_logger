@@ -1,7 +1,8 @@
 package ca.kevinlowe;
 
 /**
- * Created by kevinlowe on 2016-11-24.
+ * Represents the status of the lift.
+ * @author kevinlowe
  */
 public enum LiftStatus {
     ERROR,

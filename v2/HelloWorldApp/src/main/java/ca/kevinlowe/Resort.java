@@ -1,8 +1,6 @@
 package ca.kevinlowe;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.influxdb.InfluxDB;
-import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 
@@ -12,7 +10,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by kevinlowe on 2016-11-24.
+ * The resort class managing the parsing, loading and storing of resort data.
+ * @author kevinlowe
  */
 public abstract class Resort {
 
@@ -21,7 +20,9 @@ public abstract class Resort {
      */
     public String liftsURL;
 
-    public static final String DATABASE_NAME = "resorts";
+    /**
+     * InfluxDB tag of this resort.
+     */
     public String resortTag;
 
     /**
@@ -99,7 +100,7 @@ public abstract class Resort {
      */
     public void PublishLiftData() {
 
-        BatchPoints batchPoints = BatchPoints.database(DATABASE_NAME).build();
+        BatchPoints batchPoints = BatchPoints.database("resorts").build();
 
         // Add a point for each lift.
         for (Map.Entry<String, LiftStatus> entry : lifts.entrySet()) {

@@ -16,6 +16,7 @@ public class App
 
     public static void main( String[] args )
     {
+        // Connect to influxDB
         Common.influxDB = InfluxDBFactory.connect("http://beta.kevinlowe.ca:8086", "root", "root");
 
         // Add resorts to the list.
@@ -24,12 +25,13 @@ public class App
         resorts.add(new ResortSquawAlpine());
 
         // Iterate through resorts
-        // Update lift statuses
-        // Print statuses
         for (Resort resort : resorts) {
             try {
+                // Update lift statuses
                 resort.UpdateLifts();
                 resort.LiftsToConsole();
+
+                // Publish to InfluxDB
                 resort.PublishLiftData();
             }
             catch (Exception e) {}
