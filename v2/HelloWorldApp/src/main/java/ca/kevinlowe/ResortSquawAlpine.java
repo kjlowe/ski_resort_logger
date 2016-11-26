@@ -1,42 +1,64 @@
 package ca.kevinlowe;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Created by kevinlowe on 2016-11-24.
  */
 public class ResortSquawAlpine extends Resort {
 
-    public void UpdateLifts() {
+    public ResortSquawAlpine() {
+        textToLiftTag.put("First Venture", "first-venture");
+        textToLiftTag.put("Tucker", "tucker");
+        textToLiftTag.put("Big Blue Express", "big-blue");
+        textToLiftTag.put("Kangaroo", "kangaroo");
+        textToLiftTag.put("SnoVentures Carpet", "sv-carpet");
+        textToLiftTag.put("Red Dog", "real-dog");
+        textToLiftTag.put("Headwall Express", "headwall");
+        textToLiftTag.put("Squaw Creek", "squaw");
+        textToLiftTag.put("Mountain Meadow", "mountain");
+        textToLiftTag.put("Shuttle to Alpine Meadows", "alpine-shuttle");
+        textToLiftTag.put("Wylee", "mylee");
+        textToLiftTag.put("Belmont", "belmont");
+        textToLiftTag.put("Shirley Express", "shirley");
+        textToLiftTag.put("Sherwood Express", "sherwood");
+        textToLiftTag.put("Subway", "subway");
+        textToLiftTag.put("Granite Chief Lift", "granite");
+        textToLiftTag.put("Boon", "boon");
+        textToLiftTag.put("Silverado", "silverado");
+        textToLiftTag.put("Aerial Tram", "aerial");
+        textToLiftTag.put("Far East Express", "far-east");
+        textToLiftTag.put("Murphy", "murphy");
+        textToLiftTag.put("Squaw One Express", "squaw-one");
+        textToLiftTag.put("Emigrant", "emigrent");
+        textToLiftTag.put("Bailey's Beach", "baileys");
+        textToLiftTag.put("Gold Coast Express", "gold-coast");
+        textToLiftTag.put("Meadow", "meadow");
+        textToLiftTag.put("The Pulley", "pulley");
+        textToLiftTag.put("Solitude", "solitude");
+        textToLiftTag.put("Lakeview", "lakeview");
+        textToLiftTag.put("Alpine Bowl ", "alpine");
+        textToLiftTag.put("Hot Wheels", "hot-wheels");
+        textToLiftTag.put("Big Carpet", "big-carpet");
+        textToLiftTag.put("Roundhouse", "roundhouse");
+        textToLiftTag.put("Funitel", "funitel");
+        textToLiftTag.put("Broken Arrow Lift", "broken-arrow");
+        textToLiftTag.put("Exhibition", "exhibition");
+        textToLiftTag.put("Summit Six", "summit-six");
+        textToLiftTag.put("Shuttle to Squaw Valley", "squaw-shuttle");
+        textToLiftTag.put("Yellow", "yellow");
+        textToLiftTag.put("Siberia Express", "siberia");
+        textToLiftTag.put("Little Carpet", "little-carpet");
+        textToLiftTag.put("KT22 Express", "KT22");
+        textToLiftTag.put("Olympic Lady", "olympic");
+        textToLiftTag.put("Scott", "scott");
 
-        // Get HTML from resort website.
-        String html = Common.HTTPGetContents("http://squawalpine.com/skiing-riding/weather-conditions-webcams/lift-grooming-status");
-        html = StringEscapeUtils.unescapeHtml4(html);
+        textToLiftStatus.put("C", LiftStatus.CLOSED);
+        textToLiftStatus.put("P", LiftStatus.SCHEDULED);
+        textToLiftStatus.put("O", LiftStatus.OPEN);
 
-        // Matching pattern for lifts and statuses
-        Pattern pattern = Pattern.compile("<div class=\"lift clearfix\"><div class=\"cell\">(.+?)</div>.+?status status-(.)", Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(html);
-        while (matcher.find()) {
+        liftsPattern = "<div class=\"lift clearfix\"><div class=\"cell\">(.+?)</div>.+?status status-(.)";
+        liftsURL = "http://squawalpine.com/skiing-riding/weather-conditions-webcams/lift-grooming-status";
 
-
-            // Convert status to enumeration
-            LiftStatus status = LiftStatus.ERROR;
-            switch (matcher.group(2)) {
-                case "C":
-                    status = LiftStatus.CLOSED;
-                    break;
-                case "P":
-                    status = LiftStatus.SCHEDULED;
-                    break;
-                case "O":
-                    status = LiftStatus.OPEN;
-            }
-
-            lifts.put(matcher.group(1), status);
-        }
+        resortTag = "squaw";
     }
 
     public void UpdateWeather() {

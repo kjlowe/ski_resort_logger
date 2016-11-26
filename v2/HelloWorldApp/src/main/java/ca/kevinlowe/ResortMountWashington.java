@@ -1,44 +1,29 @@
 package ca.kevinlowe;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * Created by kevinlowe on 2016-11-24.
  */
 public class ResortMountWashington extends Resort {
 
-    public void UpdateLifts() {
+    public ResortMountWashington() {
+        textToLiftTag.put("Upper Carpet", "upper-carpet");
+        textToLiftTag.put("Lower Carpet", "lower-carpet");
+        textToLiftTag.put("Whiskey Jack", "whiskey-jack");
+        textToLiftTag.put("The Tube Park", "tube-park");
+        textToLiftTag.put("Teaching Carpet", "teach-carpet");
+        textToLiftTag.put("Sunrise", "sunrise");
+        textToLiftTag.put("Boomerang", "boomerang");
+        textToLiftTag.put("Eagle", "eagle");
+        textToLiftTag.put("Hawk", "hawk");
+        textToLiftTag.put("Middle Carpet", "middle-carpet");
 
-        // Get HTML from Whistler Blackcomb website.
-        String html = Common.HTTPGetContents("https://www.mountwashington.ca/weather/live-lift-status.html");
-        html = StringEscapeUtils.unescapeHtml4(html);
+        textToLiftStatus.put("statusclosed", LiftStatus.CLOSED);
+        textToLiftStatus.put("statusopen", LiftStatus.OPEN);
 
-        // Matching pattern for lifts and statuses
-        Pattern pattern = Pattern.compile("<h2 class=\"liftstatus\">(.+?)</h2>.+?<span class=\"([a-z]+?)\">");
-        Matcher matcher = pattern.matcher(html);
-        while (matcher.find()) {
+        liftsPattern = "<h2 class=\"liftstatus\">(.+?)</h2>.+?<span class=\"([a-z]+?)\">";
+        liftsURL = "https://www.mountwashington.ca/weather/live-lift-status.html";
 
-            String lift = matcher.group(1);
-            String statusText = matcher.group(2);
-
-            // Convert status to enumeration
-            LiftStatus status = LiftStatus.ERROR;
-            switch (statusText) {
-                case "statusclosed":
-                    status = LiftStatus.CLOSED;
-                    break;
-                case "statusopen":
-                    status = LiftStatus.OPEN;
-                    break;
-                case "statusstandby":
-                    status = LiftStatus.STANDBY;
-            }
-
-            lifts.put(lift, status);
-        }
+        resortTag = "washington";
     }
 
     public void UpdateWeather() {

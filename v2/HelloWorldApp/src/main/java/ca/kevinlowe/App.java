@@ -1,5 +1,7 @@
 package ca.kevinlowe;
 
+import org.influxdb.InfluxDBFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -14,24 +16,23 @@ public class App
 
     public static void main( String[] args )
     {
+        Common.influxDB = InfluxDBFactory.connect("http://beta.kevinlowe.ca:8086", "root", "root");
+
+        // Add resorts to the list.
         resorts.add(new ResortMountWashington());
         resorts.add(new ResortWhistlerBlackcomb());
         resorts.add(new ResortSquawAlpine());
 
+        // Iterate through resorts
+        // Update lift statuses
+        // Print statuses
         for (Resort resort : resorts) {
             try {
                 resort.UpdateLifts();
-
-                System.out.println(resort.getClass().toString());
-                for (Map.Entry<String, LiftStatus> entry : resort.lifts.entrySet()) {
-                    System.out.println(entry.getKey() + " > " + entry.getValue());
-                }
-                System.out.println("Number of Lifts : " + resort.getLiftCount());
-                System.out.println();
+                resort.LiftsToConsole();
+                resort.PublishLiftData();
             }
             catch (Exception e) {}
         }
-
-
     }
 }
