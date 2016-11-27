@@ -18,7 +18,7 @@ public class Lift {
     public LiftStatus statusCurrent;
 
     /**
-     * loaded history of the lifts status changes
+     * loaded history of the parsedLiftStatuses status changes
      */
-    public LinkedList<LiftStatusChange> statusHistory;
+    public LinkedList<LiftStatusChange> statusHistory = new LinkedList<LiftStatusChange>();
 }

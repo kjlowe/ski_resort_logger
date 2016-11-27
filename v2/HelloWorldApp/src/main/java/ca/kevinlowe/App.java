@@ -4,7 +4,6 @@ import org.influxdb.InfluxDBFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Hello world!
@@ -28,13 +27,17 @@ public class App
         for (Resort resort : resorts) {
             try {
                 // Update lift statuses
-                resort.UpdateLifts();
+                resort.ReadLiftStatusHistory(7);
+                resort.ParseLiftStatuses();
                 resort.LiftsToConsole();
 
                 // Publish to InfluxDB
-                resort.PublishLiftData();
+                resort.PublishNewLiftStatuses();
+                System.out.println();
             }
-            catch (Exception e) {}
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 }
