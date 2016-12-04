@@ -7,6 +7,7 @@ public class ResortSquawAlpine extends Resort {
 
     public ResortSquawAlpine() {
 
+
         textToLiftTag.put("First Venture", "first-venture");
         textToLiftTag.put("Tucker", "tucker");
         textToLiftTag.put("Big Blue Express", "big-blue");
