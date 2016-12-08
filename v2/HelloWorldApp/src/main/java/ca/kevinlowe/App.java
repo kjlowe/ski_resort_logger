@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class App 
 {
-    public static List<Resort> resorts = new ArrayList<>();
+    public static List<Resort> resorts = new ArrayList<Resort>();
 
     public static void main( String[] args )
     {
