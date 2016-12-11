@@ -8,13 +8,14 @@
   * Test that I parse all lift that I expect.
   * Test that application runs (eg. Fail after maven shade minimal).
   * Setting up InfluxDB testing database. What's a good strategy to ensure I don't interfere with production?
-  
+
 **Notes for the future:**
 - Jackson XML/JSON parser
 - Jetty web service
 
 **Completed:**
-1. Parsing multiple lifts.
+
+1. Parsing multiple lifts
 2. InfluxDB publishing
 3. Jenkins build server
 4. Github > jenkins triger
