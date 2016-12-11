@@ -6,20 +6,22 @@ package ca.kevinlowe;
 public class ResortMountWashington extends Resort {
 
     public ResortMountWashington() {
-        textToLiftTag.put("Upper Carpet", "upper-carpet");
-        textToLiftTag.put("Lower Carpet", "lower-carpet");
-        textToLiftTag.put("Whiskey Jack", "whiskey-jack");
-        textToLiftTag.put("The Tube Park", "tube-park");
-        textToLiftTag.put("Teaching Carpet", "teach-carpet");
-        textToLiftTag.put("Sunrise", "sunrise");
-        textToLiftTag.put("Boomerang", "boomerang");
-        textToLiftTag.put("Eagle", "eagle");
-        textToLiftTag.put("Hawk", "hawk");
-        textToLiftTag.put("Middle Carpet", "middle-carpet");
+        liftTextToTag.put("Upper Carpet", "upper-carpet");
+        liftTextToTag.put("Lower Carpet", "lower-carpet");
+        liftTextToTag.put("Whiskey Jack", "whiskey-jack");
+        liftTextToTag.put("The Tube Park", "tube-park");
+        liftTextToTag.put("Teaching Carpet", "teach-carpet");
+        liftTextToTag.put("Sunrise", "sunrise");
+        liftTextToTag.put("Boomerang", "boomerang");
+        liftTextToTag.put("Eagle", "eagle");
+        liftTextToTag.put("Hawk", "hawk");
+        liftTextToTag.put("Middle Carpet", "middle-carpet");
 
-        textToLiftStatus.put("statusclosed", LiftStatus.CLOSED);
-        textToLiftStatus.put("statusopen", LiftStatus.OPEN);
-        textToLiftStatus.put("statusscheduled", LiftStatus.SCHEDULED);
+        liftTextToIgnore.add("Hawk Cam");
+
+        statusTextToStatus.put("statusclosed", LiftStatus.CLOSED);
+        statusTextToStatus.put("statusopen", LiftStatus.OPEN);
+        statusTextToStatus.put("statusscheduled", LiftStatus.SCHEDULED);
 
         liftsPattern = "<h2 class=\"liftstatus\">(.+?)</h2>.+?<span class=\"([a-z]+?)\">";
         liftsURL = "https://www.mountwashington.ca/weather/live-lift-status.html";

@@ -9,7 +9,10 @@ import org.influxdb.dto.QueryResult;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +25,8 @@ import java.util.regex.Pattern;
  */
 public abstract class Resort {
 
+    public Logger log = LoggerFactory.getLogger(this.getClass());
+
     /**
      * URL of the resorts live lift status page.
      */
@@ -33,6 +38,11 @@ public abstract class Resort {
     public String resortTag;
 
     /**
+     * The measurement for lift. Switch to lifts_test for development
+     */
+    public String liftsMeasurement = "lifts";
+
+    /**
      * Pattern to parse out the lift and their statuses from HTML page.
      */
     public String liftsPattern;
@@ -40,11 +50,13 @@ public abstract class Resort {
     /**
      * Maps to convert from parsed strings to lift-tags nad statuses
      */
-    public Map<String, String> textToLiftTag = new HashMap<String,String>();
-    public Map<String, LiftStatus> textToLiftStatus = new HashMap<String,LiftStatus>();
+    public Map<String, String> liftTextToTag = new HashMap<String,String>();
+    public List<String> liftTextToIgnore = new ArrayList<String>();
+
+    public Map<String, LiftStatus> statusTextToStatus = new HashMap<String,LiftStatus>();
 
     /**
-     * Pattern to parse out the lift and their statuses
+     * List of lifts.
      */
     public Map<String, Lift> lifts = new HashMap<String, Lift>();
 
@@ -72,7 +84,6 @@ public abstract class Resort {
     /**
      * Reads the resorts live lift status page and parses out the current status of each lift.
      * Currently parsedLiftStatuses are configured in a child class.
-     * Currently errors are written to the console.
      */
     public void ParseLiftStatuses() {
 
@@ -87,21 +98,28 @@ public abstract class Resort {
         while (liftMatcher.find()) {
 
             // Use found lift name to lookup lift influxDB tag
-            if (!textToLiftTag.containsKey(liftMatcher.group(1))) {
-                System.out.println("Unknown Lift: " + liftMatcher.group(1));
+            String liftText = liftMatcher.group(1);
+            if (liftTextToIgnore.contains(liftText)) {
+                log.debug("Ignoring Lift Text: " + liftText);
                 continue;
             }
-            String liftText = textToLiftTag.get(liftMatcher.group(1));
+
+            if (!liftTextToTag.containsKey(liftText)) {
+                log.error("Unknown Lift Text: " + liftText);
+                continue;
+            }
+            String liftTag = liftTextToTag.get(liftText);
 
             // Convert found status to enumeration
-            if (!textToLiftStatus.containsKey(liftMatcher.group(2))) {
-                System.out.println("Unknown Status: " + liftMatcher.group(2));
+            String statusText = liftMatcher.group(2);
+            if (!statusTextToStatus.containsKey(statusText)) {
+                log.error("Unknown Status Text: " + statusText);
                 continue;
             }
-            LiftStatus status = textToLiftStatus.get(liftMatcher.group(2));
+            LiftStatus status = statusTextToStatus.get(statusText);
 
             // Set the current status of the lift
-            getLift(liftText).statusCurrent = status;
+            getLift(liftTag).statusCurrent = status;
         }
     }
 
@@ -109,13 +127,13 @@ public abstract class Resort {
      * Prints out the current status of each lift to the console.
      */
     public void LiftsToConsole() {
-        System.out.println(getClass().toString());
+        log.debug(getClass().toString());
         for (Map.Entry<String, Lift> entry : lifts.entrySet()) {
-            System.out.println(entry.getKey() + " > " +
+            log.debug(entry.getKey() + " > " +
                     entry.getValue().statusCurrent + " > " +
                     "History: " + entry.getValue().statusHistory.size());
         }
-        System.out.println("Number of Lifts : " + getLiftCount());
+        log.debug("Number of Lifts : " + getLiftCount());
     }
 
     /**
@@ -127,13 +145,22 @@ public abstract class Resort {
 
         // Add a point for each lift.
         for (Map.Entry<String, Lift> entry : lifts.entrySet()) {
-
             Lift lift = entry.getValue();
 
-            if (lift.statusHistory.size() == 0 ||
-                    lift.statusHistory.getLast().status != lift.statusCurrent) {
+            if (lift.statusHistory.size() == 0 || lift.statusHistory.getLast().status != lift.statusCurrent) {
 
-                Point point = Point.measurement("lifts").tag("resort", resortTag)
+                // Log first lift status entry
+                if (lift.statusHistory.size() == 0) {
+                    log.info("Publishing first status for " + lift.name + " (" + lift.statusCurrent + ")");
+                }
+                // Log lift status change
+                else {
+                    log.info(lift.name + " was " + lift.statusHistory.getLast().toString() +
+                            ", now " + lift.statusCurrent.toString() + ". Publishing");
+                }
+
+                // Create influxDB point
+                Point point = Point.measurement(liftsMeasurement).tag("resort", resortTag)
                         .tag("lift", lift.name).addField("status", lift.statusCurrent.toString()).build();
                 batchPoints.point(point);
             }
@@ -142,7 +169,7 @@ public abstract class Resort {
         // Run the influxDB query
         if (batchPoints.getPoints().size() > 1) {
             Common.influxDB.write(batchPoints);
-            System.out.println("Wrote " + batchPoints.getPoints().size() + " points to InfluxDB!");
+            log.info("Sent " + batchPoints.getPoints().size() + " points to InfluxDB.");
         }
     }
 
@@ -151,17 +178,25 @@ public abstract class Resort {
      */
     public void ReadLiftStatusHistory(int days) {
 
-        Query query = new Query("SELECT status, lift FROM lifts WHERE resort = '" + resortTag + "' GROUP BY lift", "resorts");
+        Query query = new Query("SELECT status, lift FROM " +
+                liftsMeasurement + " WHERE resort = '" + resortTag + "' GROUP BY lift", "resorts");
+
         QueryResult queryResult = Common.influxDB.query(query);
 
         // 1 Result object
-        if (queryResult.hasError() || queryResult.getResults().size() != 1)
+        if (queryResult.hasError()) {
+            log.error(queryResult.getError());
             return;
+        }
+        if (queryResult.getResults().size() != 1) {
+            log.error("Expecting 1 result from query, but got " + queryResult.getResults().size());
+        }
 
         QueryResult.Result result = queryResult.getResults().get(0);
-
-        if (result.getSeries() == null)
+        if (result.getSeries() == null) {
+            log.error("Null series.");
             return;
+        }
 
         // Loop through each lift (series)
         for (QueryResult.Series series : result.getSeries()) {
