@@ -155,7 +155,7 @@ public abstract class Resort {
                 }
                 // Log lift status change
                 else {
-                    log.info(lift.name + " was " + lift.statusHistory.getLast().toString() +
+                    log.info(lift.name + " was " + lift.statusHistory.getLast().status.toString() +
                             ", now " + lift.statusCurrent.toString() + ". Publishing");
                 }
 
@@ -167,7 +167,7 @@ public abstract class Resort {
         }
 
         // Run the influxDB query
-        if (batchPoints.getPoints().size() > 1) {
+        if (batchPoints.getPoints().size() > 0) {
             Common.influxDB.write(batchPoints);
             log.info("Sent " + batchPoints.getPoints().size() + " points to InfluxDB.");
         }
