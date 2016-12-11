@@ -131,7 +131,7 @@ public abstract class Resort {
             Lift lift = entry.getValue();
 
             if (lift.statusHistory.size() == 0 ||
-                    lift.statusHistory.getFirst().status != lift.statusCurrent) {
+                    lift.statusHistory.getLast().status != lift.statusCurrent) {
 
                 Point point = Point.measurement("lifts").tag("resort", resortTag)
                         .tag("lift", lift.name).addField("status", lift.statusCurrent.toString()).build();
