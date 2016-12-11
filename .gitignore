@@ -20,3 +20,5 @@ v2/HelloWorldApp/log/
 v2/HelloWorldApp/target/
 
 *.log
+
+v2/HelloWorldApp/dependency-reduced-pom.xml
