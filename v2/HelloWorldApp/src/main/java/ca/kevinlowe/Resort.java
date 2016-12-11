@@ -149,7 +149,7 @@ public abstract class Resort {
     /**
      * Read the resort history from the last X number od days.
      */
-    public void ReadLiftStatusHistory(int days) {
+    public void ReadLiftStatusHistory(int days)
 
         Query query = new Query("SELECT status, lift FROM lifts WHERE resort = '" + resortTag + "' GROUP BY lift", "resorts");
         QueryResult queryResult = Common.influxDB.query(query);
