@@ -1,5 +1,9 @@
 # Ski Resort Logger (v2)
 
+Version 2 is being being built to support multiple (hopefully hundreds) or ski resorts. It will be built using proper
+software development techniques to ensure easy software maintenance for the developer and easy management of resorts
+for some sort of admin interface.
+
 **Current Priorities:**
 - Better production setup.
   * Jenkins copies to archive. Should I be copying this somewhere else for exectuting? /var/lib/jenkins/.m2/repository/ca/kevinlowe/hello-world/1.0-SNAPSHOT/hello-world-1.0-SNAPSHOT.jar
