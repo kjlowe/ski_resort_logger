@@ -5,6 +5,7 @@ software development techniques to ensure easy software maintenance for the deve
 for some sort of admin interface.
 
 **Current Priorities:**
+- GOAL: From now on, very important to keep lifts dataset clean.
 - Better production setup.
   * Jenkins copies to archive. Should I be copying this somewhere else for exectuting? /var/lib/jenkins/.m2/repository/ca/kevinlowe/hello-world/1.0-SNAPSHOT/hello-world-1.0-SNAPSHOT.jar
   * Proper location to store a crontab script. How to install.
