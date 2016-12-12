@@ -56,6 +56,18 @@ if ($mysqli->connect_errno) {
 
 $mysqli->query("SET time_zone= '-8:00';") OR die("ERROR");  
 
+if (isset($_GET["debug"]))
+{
+	if ($result = $mysqli->query("SELECT CURTIME() as time;", MYSQLI_USE_RESULT) OR die($mysqli->error))
+	{
+		if ($row = $result->fetch_array(MYSQLI_ASSOC))
+		{
+			echo $row['time'];
+		}
+		$result->close();
+	}
+}
+	
 // Get an arary of dates for the past past 7 days
 $dates = array();
 $query = "SELECT ";
@@ -165,7 +177,7 @@ if (isset($_GET["showall"]))
 	echo "</tr>";
 	
 	echo "<tr><td>FRANZ'S</td>";
-	print_chair_row("FRANZ'S CHAIR");
+	print_chair_row("FRANZ&#39;S CHAIR");
 	echo "</tr>";
 	
 	echo "<tr><td>OLYMPIC</td>";
@@ -356,3 +368,4 @@ function print_snowfall_row($mysqli, $days_to_show)
 
 </body>
 </html>
+

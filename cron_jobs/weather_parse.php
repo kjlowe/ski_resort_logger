@@ -10,7 +10,24 @@ $data = json_decode($json, true);
 
 $stations = $data["WeatherStation"];
 
-/* List of station ID's
+/*
+[StationName] => Creekside Village
+[StationID] => 103
+[CurrentDate] => 12/24/2015 6:15:00 PM
+[Elevation] => 640
+[MaxTemp] => -4.4
+[AvgTemp] => -4.5
+[MinTemp] => -4.6
+[MaxWind] => 0.0
+[AvgWind] => -49.8
+[WindDir] => -90.0
+[WindRun] => Array ( [0] => )
+[RH] => 87.9
+[BP] => 893.0
+[BattVoltage] => 13.2900
+[ModuleTemp] => 29.2700
+[Ext1] => 0.0000 )
+
 Whistler Village [StationID] = 160
 Whistler Peak [StationID] = 201
 Roundhouse [StationID] = 203

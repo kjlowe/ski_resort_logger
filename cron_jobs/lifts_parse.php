@@ -10,25 +10,31 @@ $query = "SELECT name, opened, closed FROM status WHERE date = CURDATE();";
 $result = $mysqli->query($query);
 if (!$result)
 {
-	echo "oh no";
-	exit;
+  echo "oh no";
+  exit;
 }
 
 while ($row = $result->fetch_assoc()) {
     $current[$row["name"]]["opened"] = $row["opened"];
-    $current[$row["name"]]["closed"] = $row["closed"];	
+    $current[$row["name"]]["closed"] = $row["closed"];  
 }
 
 // Get the contents of the whistler blackcomb page
-$html = file_get_contents("http://movement.whistlerblackcomb.com/wbwidget2012/liftstatus.php");
+$html = file_get_contents("https://www.whistlerblackcomb.com/mountain-info/snow-report#lifts-and-trails");
+str_replace("&#39;","",$html);
 
 // Get lift names 
-preg_match_all("/<td>([a-zA-Z0-9- ']+)<\/td>/", $html, $matches);
-$lifts = $matches[1];
-
 // Get lift statuses
-preg_match_all("/<td class='([A-Z]+)'/", $html, $matches2);
-$statuses = $matches2[1];
+preg_match_all("/<\/span>([a-zA-Z0-9- '&#;]+)<\/td>[\r\n ]+<td>([a-zA-Z0-9- ']+)<\/td>/s", $html, $matches2);
+$lifts = $matches2[1];
+$statuses = $matches2[2];
+
+if ($lifts[23] == "PEAK 2 PEAK GONDOLA")
+{
+  array_splice($lifts, 23, 1);
+  array_splice($statuses, 23, 1);
+  echo "Nice!";
+}
 
 
 // Update the database when a chair opens or closes.
@@ -49,7 +55,7 @@ for($i = 0; $i < sizeof($lifts); ++$i)
     $query .= "INSERT INTO `log` (`logtext`) VALUES ('".addslashes($lifts[$i])." IS in database. Updating. Now Open.');\n";
   }
 
-  // The lift IS NOT in the database for this date and it now on standby.
+  // The lift IS NOT in the database for this date and it is now on standby.
   // INSERT a row and record the standby time.
   else if (!isset($current[$lifts[$i]]) && $statuses[$i] == "STANDBY")
   {
