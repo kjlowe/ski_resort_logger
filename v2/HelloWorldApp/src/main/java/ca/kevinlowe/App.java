@@ -27,7 +27,7 @@ public class App
      */
     public static void main( String[] args )
     {
-        log.info("Application started.");
+        log.trace("Application started.");
 
         // Connect to influxDB
         Common.influxDB = InfluxDBFactory.connect("http://beta.kevinlowe.ca:8086", "root", "root");
@@ -40,16 +40,10 @@ public class App
         // Iterate through resorts
         for (Resort resort : resorts) {
             try {
-                // Update lift statuses
-                resort.ReadLiftStatusHistory(7);
-                resort.ParseLiftStatuses();
-                resort.LiftsToConsole();
-
-                // Publish to InfluxDB
-                resort.PublishNewLiftStatuses();
+                resort.UpdateResortLifts();
             }
             catch (Exception e) {
-                log.error("Exception: " + e.getLocalizedMessage() + e.getMessage());
+                log.error("Oh no! Exception! ", e);
             }
         }
     }

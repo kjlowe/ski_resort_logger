@@ -82,6 +82,31 @@ public abstract class Resort {
     }
 
     /**
+     * Loads history, parses new statuses and updates InfluxDB.
+     */
+    void UpdateResortLifts() {
+
+        // Get history and current status
+        ReadLiftStatusHistory(7);
+        ParseLiftStatuses();
+
+        // Ensure all lifts we expect were found.
+        for (Map.Entry<String, String> entry : liftTextToTag.entrySet()) {
+            if (!lifts.containsKey(entry.getValue())) {
+                log.error( entry.getKey() + "/" + entry.getValue() + " was not found in influx nor in parsed HTML.");
+                continue;
+            }
+            if (lifts.get(entry.getValue()).statusCurrent == null) {
+                log.error("Tag '" + entry.getValue() + "' found in influx, but it's text '" + entry.getKey() + "' not found in HTML .");
+                continue;
+            }
+        }
+
+        // Update Influx
+        PublishNewLiftStatuses();
+    }
+
+    /**
      * Reads the resorts live lift status page and parses out the current status of each lift.
      * Currently parsedLiftStatuses are configured in a child class.
      */
@@ -147,7 +172,8 @@ public abstract class Resort {
         for (Map.Entry<String, Lift> entry : lifts.entrySet()) {
             Lift lift = entry.getValue();
 
-            if (lift.statusHistory.size() == 0 || lift.statusHistory.getLast().status != lift.statusCurrent) {
+            if (lift.statusHistory.size() == 0 ||
+                    (lift.statusHistory.getLast().status != lift.statusCurrent && lift.statusCurrent != null)) {
 
                 // Log first lift status entry
                 if (lift.statusHistory.size() == 0) {
