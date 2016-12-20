@@ -55,7 +55,7 @@ public class ResortSquawAlpine extends Resort {
         statusTextToStatus.put("P", LiftStatus.SCHEDULED);
         statusTextToStatus.put("O", LiftStatus.OPEN);
 
-        liftsPattern = "<div class=\"lift clearfix\"><div class=\"cell\">(.+?)</div>.+?status status-(.)";
+        liftsPattern = "<div class=\"lift clearfix\">.+?<div class=\"cell\">(.+?)</div>.+?status status-(.)";
         liftsURL = "http://squawalpine.com/skiing-riding/weather-conditions-webcams/lift-grooming-status";
 
         resortTag = "squaw";
