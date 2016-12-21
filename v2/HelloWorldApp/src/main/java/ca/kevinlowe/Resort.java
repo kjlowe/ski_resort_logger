@@ -138,7 +138,8 @@ public abstract class Resort {
             // Convert found status to enumeration
             String statusText = liftMatcher.group(2);
             if (!statusTextToStatus.containsKey(statusText)) {
-                log.error("Unknown Status Text: " + statusText);
+                log.error("Unknown Status Text: " + statusText + " Setting to UNKNOWN.");
+                getLift(liftTag).statusCurrent = LiftStatus.UNKNOWN;
                 continue;
             }
             LiftStatus status = statusTextToStatus.get(statusText);

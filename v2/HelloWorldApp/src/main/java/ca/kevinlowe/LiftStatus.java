@@ -5,7 +5,7 @@ package ca.kevinlowe;
  * @author kevinlowe
  */
 public enum LiftStatus {
-    ERROR,
+    UNKNOWN,
     OPEN,
     CLOSED,
     SCHEDULED,
