@@ -23,6 +23,7 @@ public class ResortMountWashington extends Resort {
         statusTextToStatus.put("statusopen", LiftStatus.OPEN);
         statusTextToStatus.put("statusscheduled", LiftStatus.SCHEDULED);
         statusTextToStatus.put("statusstandby", LiftStatus.STANDBY);
+        statusTextToStatus.put("statusstandyby", LiftStatus.STANDBY);
 
         liftsPattern = "<h2 class=\"liftstatus\">(.+?)</h2>.+?<span class=\"([a-z]+?)\">";
         liftsURL = "https://www.mountwashington.ca/weather/live-lift-status.html";
